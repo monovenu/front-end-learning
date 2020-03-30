@@ -3,7 +3,7 @@
 
 作者：刘洋鑫
 
-## 1、简介
+# 1、简介
 Spine 是一种针对游戏的 2D 骨骼动画。设计师制作出Spine动画后，开发人员可以在程序中使用，丰富页面的视觉效果。
 Spine 通过将图片绑定到骨骼上，然后再控制骨骼实现动画。  
 
@@ -14,14 +14,14 @@ Spine 通过将图片绑定到骨骼上，然后再控制骨骼实现动画。
 Spine官方提供了众多运行库。在项目中，我们在3d 场景中播放Spine动画，使用spine-threejs 运行库。  
 ![](https://github.com/monovenu/front-end-learning/blob/master/images/spine.png)
 
-## 2、Spine源文件
+# 2、Spine源文件
 设计师提供给我们的spine动画资源包括三个文件: .atlas, .json, .png。  
 atlas文件包含对png图片的引用以及使用的骨骼节点的元数据。  
 json文件包含骨骼信息，动作信息，节点使用的贴图数据等。  
 动作数组animation中给出了骨骼各节点的具体动作：rotate, scale, shear,和translate。  
 一个Spine动画可以包含多个动作，此时动作数组有多个成员。  
 png文件是动画使用的雪碧图。  
-## 3、应用Spine动画
+# 3、应用Spine动画
 应用一个Spine动画的步骤如下：  
       1.  加载从json文件中导出骨架数据  
       2.  由骨架数据生成SkeletonJson  
@@ -29,7 +29,7 @@ png文件是动画使用的雪碧图。
       4. SkeletonData生成SkeletonMesh  
       5. 对SkeletonMesh的动画state成员设置动画参数  
       6. 播放动画, 对SkeletonMesh进行更新  
-### 3.1、生成SkeletonData
+## 3.1、生成SkeletonData
 由骨架数据可以生成SkeletonData
 骨架结构为Skeleton(骨架)-->Bone(骨头）-->Slot(节点）-->Attachment(附件)
 图片是附件的一种，节点可以有多个附件，但同一时间只能显示一个。
@@ -42,7 +42,7 @@ png文件是动画使用的雪碧图。
 骨骼绑定的过程就是确定每个顶点受哪几根骨骼的影响，每根骨骼影响的权重有多大，譬如肘部的皮肤可能同时受大臂和小臂两根骨头的影响，而远离手肘的部分可能就只受小臂骨头影响。
 一般在3D骨骼动画里，每个顶点最多支持4-8根骨骼同时作用，这就已经可以很精确地表达整个蒙皮的效果了。
 
-### 3.2、生成SkeletonMesh
+## 3.2、生成SkeletonMesh
 在spine-three的实现中，存在数据对象和实例对象。数据对象被用于创建骨架等实例对象。  
 数据对象是无状态的，可在任意数量的骨架实例间共用。
 数据对象类名称以“Data”结尾，如SkeletonData。  
@@ -58,7 +58,7 @@ Spine在3d场景中的以SkeletonMesh(一种3d 物体)呈现。  它包括
 |  vertices | 顶点数据 | 
 |  quaternion | 父骨骼的四元数旋转值 | 
 |  parent | 父节点，加入场景中后为scene | 
-### 3.3、设置动画
+## 3.3、设置动画
 AnimationState.setAnimation方法设置播放哪一个骨骼动画。  
 setAnimation只能播放一种动画，当要连续播放不同的动画时，使用addAnimation方法，它继续播放不同的动画。 
 骨骼以层级方式排列，每个骨骼受父骨骼影响，一直到根骨骼。例如，当一个骨骼旋转时，所有子骨骼及其子骨骼也会旋转。  
@@ -67,12 +67,12 @@ setAnimation只能播放一种动画，当要连续播放不同的动画时，�
     rotation：旋转  
     scaleX 和 scaleY：比例  
 Spine动画就是通过改变这些数据来实现各种动作。
-### 3.4、播放动画
+## 3.4、播放动画
 实际是对skeletonMesh进行更新， 包括  
     AnimationState.update(); 逐个播放动画序列  
     skeleton.setTimelineData  旋转、缩放、变形  
     updateGeometry 更新uv贴图, 光 。  
-## 4、功能拓展
+# 4、功能拓展
 项目中实现了三种任务：LoadSpineTask(加载文件)、SpineTask(播放)、Spine3dTask(移动mesh)。  
 LoadSpineTask用于加载Spine资源文件。  
 SpineTask用于播放动画。  
@@ -99,7 +99,7 @@ SpineTask用于播放动画。
 Spine3dTask负责将mesh从一个位置移动到另一个位置。  
 播放速率和动画起始播放时间的实现是通过对setAnimation返回的TrackEntry进行自定义播放实现的。  
 播放完毕后保留场景中的SkeletonMesh可以实现动画停留在最后一帧的效果。  
-## 5、内存优化
+# 5、内存优化
 为了减少内存占用，可以对多次使用的Spine动画应用两种策略。  
 在同一时间点只会播放一次直接保存SkeletonMesh，下次播放时使用同一个SkeletonMesh，减少内存占用。只不过要重新设置位置、大小、播放速率、播放动作等。    
 在同一时间点会同时播放多次的意味着会同时存在多个SkeletonMesh，所以保存一个SkeletonMesh不够用，需要保存生成SkeletonMesh的SkeletonData。下次播放时使用同一份SkeletonData来重新创建SkeletonMesh，无须重复加载Spine资源文件。  
@@ -156,7 +156,7 @@ Spine3dTask负责将mesh从一个位置移动到另一个位置。
             this.saveSkeletonDataList[name] = null;
         }
 
-## 6、业务实现
+# 6、业务实现
 项目中实现了两种控制器：Spine动画控制器和业务动画控制器。  
 由业务动画控制器调用Spine动画控制器，外部直接调用的只有业务动画控制器。  
 这两者的实例都是唯一的。播放动画时调用业务动画控制器的方法，一个特效对应一个方法。  
